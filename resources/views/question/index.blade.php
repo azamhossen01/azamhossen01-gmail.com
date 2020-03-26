@@ -14,8 +14,8 @@
                       <thead>
                         <tr>
                           <th>SL</th>
-                          <th>Name</th>
-                          <th>Description</th>
+                          <th>Question</th>
+                          <th>Answer</th>
                           <th>Created At</th>
                           <th>Action</th>
                         </tr>
@@ -23,21 +23,28 @@
                       <tfoot>
                         <tr>
                             <th>SL</th>
-                            <th>Name</th>
-                            <th>Description</th>
+                            <th>Question</th>
+                            <th>Answer</th>
                             <th>Created At</th>
                             <th>Action</th>
                           </tr>
                       </tfoot>
                       <tbody>
-                        @forelse($questions as $key=>$set)
+                        @forelse($questions as $key=>$question)
                             <tr>
                             <td>{{$key+1}}</td>
-                            <td>{{$set->name}}</td>
-                            <td>{{$set->description}}</td>
-                            <td>{{$set->created_at->format('F d Y')}}</td>
+                            <td>{{$question->question}}</td>
                             <td>
-                            <a href="{{route('sets.edit',$set->id)}}" class="btn btn-warning btn-sm">Edit</a>
+                              @forelse($question->answers->where('is_correct',1) as $key=>$answer) 
+                                <span>#{{$answer->answer}}</span>
+                              @empty 
+
+                              @endforelse
+                            </td>
+                            <td>{{$question->created_at->format('F d Y')}}</td>
+                            <td>
+                            <a href="{{route('questions.show',$question->id)}}" class="btn btn-success btn-sm">Details</a>
+                            <a href="{{route('questions.delete',$question->id)}}" class="btn btn-danger btn-sm">Delete</a>
                             </td>
                             </tr>
                         @empty 

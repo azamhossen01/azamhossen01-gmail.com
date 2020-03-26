@@ -19,6 +19,7 @@ class CreateQuestionsTable extends Migration
             $table->unsignedBigInteger('subject_id');
             $table->text('question');
             $table->integer('type')->comment('0=mcq,1=descriptive');
+            $table->integer('marks');
             $table->timestamps();
             $table->foreign('set_id')->references('id')->on('sets')->onDelete('cascade');
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');

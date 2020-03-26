@@ -37,7 +37,28 @@ Route::group(['middleware'=>'auth'],function(){
     //route for questions 
     Route::get('questions','QuestionController@index')->name('questions.index');
     Route::get('questions/create','QuestionController@create')->name('questions.create');
-    Route::get('questions/edit/{question}','QuestionController@edit')->name('questions.edit');
+    Route::get('questions/show/{question}','QuestionController@show')->name('questions.show');
     Route::put('questions/update/{question}','QuestionController@update')->name('questions.update');
     Route::post('questions','QuestionController@store')->name('questions.store');
+    Route::get('questions/delete/{question}','QuestionController@delete')->name('questions.delete');
+
+
+    Route::put('answers/update/{id}','AnswerController@update')->name('answers.update');
+
+    //route for questions 
+    Route::get('exams','ExamController@index')->name('exams.index');
+    Route::get('exams/create','ExamController@create')->name('exams.create');
+    Route::get('exams/edit/{exam}','ExamController@edit')->name('exams.edit');
+    Route::get('exams/show/{exam}','ExamController@show')->name('exams.show');
+    Route::put('exams/update/{exam}','ExamController@update')->name('exams.update');
+    Route::post('exams','ExamController@store')->name('exams.store');
+    Route::get('exams/delete/{exam}','ExamController@delete')->name('exams.delete');
+
+
+    // route for exam start
+    
 });
+
+Route::post('start_exam','ExamController@start_exam')->name('start_exam');
+Route::post('submit_exam/{exam}','ExamController@submit_exam')->name('submit_exam');
+
