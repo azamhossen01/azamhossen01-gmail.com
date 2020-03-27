@@ -55,7 +55,11 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('exams/delete/{exam}','ExamController@delete')->name('exams.delete');
 
 
-    // route for exam start
+    // route for results
+    Route::get('results','ResultController@index')->name('results.index');
+    Route::get('results/show/{exam}','ResultController@show')->name('results.show');
+    // Route::get('results/edit/{exam_id}','ResultController@edit')->name('results.edit');
+    Route::put('results/update/{exam}','ResultController@update')->name('results.update');
     
 });
 

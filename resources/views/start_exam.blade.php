@@ -16,10 +16,11 @@
 </head>
 
 <body>
-    <div class="flex-center position-ref full-height">
+    <div class="flex-center position-ref full-height mt-2">
 
 
-        <div class="content">
+        <div class="content container mt-2">
+        
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
@@ -27,7 +28,9 @@
                             <h4>Total MCQ : {{count($mcq_questions)}}</h4>
                             <h4>Total Descriptive : {{count($descriptive_questions)}}</h4>
                         </div>
+                        @if($exam->mark_obtain_in_mcq == null)
                         <div class="card-body">
+
                             <form action="{{route('submit_exam',$exam->id)}}" method="post"
                                 enctype="multipart/form-data">
                                 @csrf
@@ -65,9 +68,17 @@
                                     @endforelse
                                 </div>
 
-                                <button class="btn btn-primary"> Submit</button>
-                            </form>
+                              
                         </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary">    Submit</button>
+                               
+                                
+                               </form>
+                            </div>
+                        @else 
+                            <h3>You have given exam. Please wait for result</h3>
+                        @endif
                     </div>
                 </div>
             </div>

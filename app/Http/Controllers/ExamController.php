@@ -53,10 +53,13 @@ class ExamController extends Controller
 
     public function start_exam(Request $request){
         $exam = Exam::where('student_phone',$request->student_phone)->first();
-        if($exam){
+
+        if($exam->mark_obtain_in_mcq == null){
         $mcq_questions = $exam->set->questions->where('type',0);
         $descriptive_questions = $exam->set->questions->where('type',1);
         return view('start_exam',compact('exam','mcq_questions','descriptive_questions'));
+        }elseif($exam->mark_obtain_in_mcq !== null){
+            return view('result_publish',compact('exam'));
         }else{
             return redirect()->back();
         }
@@ -112,39 +115,41 @@ class ExamController extends Controller
           $exam_details = ExamDetail::whereHas('question',function($query){
             $query->where('type',0);
          })->where('exam_id',$exam->id)->get()->groupBy('question_id');
-        foreach($exam_details as $key=>$exam_detail){
+        if($exam->mark_obtain_in_mcq == null){
+            foreach($exam_details as $key=>$exam_detail){
 
-            if(count($exam_detail) > 1){
-                $value = true;
-                foreach($exam_detail as $key=>$e_detail){
-                    if($e_detail->answer->is_correct !== 1){
-                        $value = false;
+                if(count($exam_detail) > 1){
+                    $value = true;
+                    foreach($exam_detail as $key=>$e_detail){
+                        if($e_detail->answer->is_correct !== 1){
+                            $value = false;
+                        }
+                        if($value == true){
+                            $mark_obtain_in_mcq = $exam->mark_obtain_in_mcq + $e_detail->question->marks/count($exam_detail);
+                            $exam->update([
+                                'mark_obtain_in_mcq' => $mark_obtain_in_mcq
+                            ]);
+                        }else{
+                            // return 'jasa';
+                        }
                     }
-                    if($value == true){
-                        $mark_obtain_in_mcq = $exam->mark_obtain_in_mcq + $e_detail->question->marks/count($exam_detail);
-                        $exam->update([
-                            'mark_obtain_in_mcq' => $mark_obtain_in_mcq
-                        ]);
-                    }else{
-                        // return 'jasa';
+                    $value = true;
+    
+                }else{
+                    // return 'single question';
+                    foreach($exam_detail as $key=>$ex_detail){
+                        if($ex_detail->answer->is_correct == 1){
+                            $mark_obtain_in_mcq = $exam->mark_obtain_in_mcq + $ex_detail->question->marks;
+                            $exam->update([
+                                'mark_obtain_in_mcq' => $mark_obtain_in_mcq
+                            ]);
+                              $exam->mark_obtain_in_mcq;
+                        }
                     }
                 }
-                $value = true;
-
-            }else{
-                // return 'single question';
-                foreach($exam_detail as $key=>$ex_detail){
-                    if($ex_detail->answer->is_correct == 1){
-                        $mark_obtain_in_mcq = $exam->mark_obtain_in_mcq + $ex_detail->question->marks;
-                        $exam->update([
-                            'mark_obtain_in_mcq' => $mark_obtain_in_mcq
-                        ]);
-                          $exam->mark_obtain_in_mcq;
-                    }
-                }
+                
+                
             }
-            
-            
         }
 
         // return 'success';

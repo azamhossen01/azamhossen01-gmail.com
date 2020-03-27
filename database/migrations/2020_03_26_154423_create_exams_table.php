@@ -20,6 +20,7 @@ class CreateExamsTable extends Migration
             $table->string('student_phone');
             $table->integer('total')->nullable();
             $table->integer('mark_obtain_in_mcq')->nullable();
+            $table->integer('mark_obtain_in_descriptive')->nullable();
             $table->timestamps();
             $table->foreign('set_id')->references('id')->on('sets')->onDelete('cascade');
         });
