@@ -45,9 +45,12 @@ class QuestionController extends Controller
         if($request->type == 1){
             $save_answer = new Answer;
             $save_answer->question_id = $question->id;
-            $image_name = time().'.'.$request->attachment->getClientOriginalExtension();
-            $request->attachment->move(public_path('backend/images'),$image_name);
-            $save_answer->attachment = $image_name;
+            if($request->attachment){
+                $image_name = time().'.'.$request->attachment->getClientOriginalExtension();
+                $request->attachment->move(public_path('backend/images'),$image_name);
+                $save_answer->attachment = $image_name;
+            }
+           
             $save_answer->save();
         }else{
             foreach($request->hide as $key=>$h){

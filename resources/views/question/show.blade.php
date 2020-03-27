@@ -45,7 +45,7 @@
                                 <div class="custom-control custom-checkbox">
                                 <input name="is_correct[]" {{$answer->is_correct==1?'checked':''}} type="checkbox" value="{{$answer->id}}" class="custom-control-input" id="{{$answer->id}}">
                                   <label class="custom-control-label" for="{{$answer->id}}">
-                                    <input value="{{$answer->answer}}" name="answer[]" type="text" class="form-control"  />
+                                    <input value="{{$answer->answer}}" name="answer[]" type="text" class="form-control col-lg-12"  />
                                   </label>
                                   </div>
                                 </td>

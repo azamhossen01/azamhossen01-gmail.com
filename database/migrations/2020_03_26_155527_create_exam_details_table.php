@@ -17,7 +17,7 @@ class CreateExamDetailsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('exam_id');
             $table->unsignedBigInteger('question_id');
-            $table->unsignedBigInteger('answer_id');
+            $table->unsignedBigInteger('answer_id')->nullable();
             $table->string('attachment')->nullable();
             $table->timestamps();
             $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');

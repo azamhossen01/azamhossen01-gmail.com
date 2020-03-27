@@ -61,4 +61,5 @@ Route::group(['middleware'=>'auth'],function(){
 
 Route::post('start_exam','ExamController@start_exam')->name('start_exam');
 Route::post('submit_exam/{exam}','ExamController@submit_exam')->name('submit_exam');
+Route::get('result_publish/{exam}','ExamController@result_publish')->name('result_publish');
 

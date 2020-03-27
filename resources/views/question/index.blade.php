@@ -14,18 +14,20 @@
                       <thead>
                         <tr>
                           <th>SL</th>
+                          <th>Set</th>
                           <th>Question</th>
                           <th>Answer</th>
-                          <th>Created At</th>
+                          <th>Marks</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tfoot>
                         <tr>
                             <th>SL</th>
+                            <th>Set</th>
                             <th>Question</th>
                             <th>Answer</th>
-                            <th>Created At</th>
+                            <th>Marks</th>
                             <th>Action</th>
                           </tr>
                       </tfoot>
@@ -33,6 +35,7 @@
                         @forelse($questions as $key=>$question)
                             <tr>
                             <td>{{$key+1}}</td>
+                            <td>{{$question->set->name}}</td>
                             <td>{{$question->question}}</td>
                             <td>
                               @forelse($question->answers->where('is_correct',1) as $key=>$answer) 
@@ -41,7 +44,7 @@
 
                               @endforelse
                             </td>
-                            <td>{{$question->created_at->format('F d Y')}}</td>
+                          <td>{{$question->marks}}</td>
                             <td>
                             <a href="{{route('questions.show',$question->id)}}" class="btn btn-success btn-sm">Details</a>
                             <a href="{{route('questions.delete',$question->id)}}" class="btn btn-danger btn-sm">Delete</a>
