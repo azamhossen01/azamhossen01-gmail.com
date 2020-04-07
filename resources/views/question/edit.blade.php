@@ -5,7 +5,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="d-inline-block">Edit Set</h3>
+                <h3 class="d-inline-block">Edit Question</h3>
             <a href="{{route('sets.create')}}" class="btn btn-primary float-right">Add New</a>
             </div>
             <div class="card-body">

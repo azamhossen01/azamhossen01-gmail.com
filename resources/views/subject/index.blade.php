@@ -35,7 +35,7 @@
                             <td>{{$key+1}}</td>
                             <td>{{$subject->name}}</td>
                             <td>{{$subject->description}}</td>
-                            <td>{{$subject->created_at->format('F d Y')}}</td>
+                            <td>{{$subject->created_at?$subject->created_at->format('F d Y'):''}}</td>
                             <td>
                             <a href="{{route('subjects.edit',$subject->id)}}" class="btn btn-warning btn-sm">Edit</a>
                             </td>

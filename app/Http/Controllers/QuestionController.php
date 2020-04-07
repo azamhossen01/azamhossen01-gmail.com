@@ -17,8 +17,8 @@ class QuestionController extends Controller
 
     public function create(){
         $subjects = Subject::all();
-        $sets = Set::all();
-        return view('question.create',compact('subjects','sets'));
+        // $sets = Set::all();
+        return view('question.create',compact('subjects'));
     }
 
     public function store(Request $request){
@@ -27,14 +27,12 @@ class QuestionController extends Controller
         // return count($correct_answers);
         $this->validate($request,[
             'subject_id' => 'required',
-            'set_id' => 'required',
             'question' => 'required',
             'type' => 'required',
             'marks' => 'required'
         ]);
         $question = Question::create([
             'subject_id' => $request->subject_id,
-            'set_id' => $request->set_id,
             'question' => $request->question,
             'type' => $request->type,
             'marks' => $request->marks

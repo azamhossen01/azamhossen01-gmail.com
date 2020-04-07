@@ -14,7 +14,6 @@
                       <thead>
                         <tr>
                           <th>SL</th>
-                          <th>Set</th>
                           <th>Question</th>
                           <th>Answer</th>
                           <th>Marks</th>
@@ -24,7 +23,6 @@
                       <tfoot>
                         <tr>
                             <th>SL</th>
-                            <th>Set</th>
                             <th>Question</th>
                             <th>Answer</th>
                             <th>Marks</th>
@@ -35,11 +33,10 @@
                         @forelse($questions as $key=>$question)
                             <tr>
                             <td>{{$key+1}}</td>
-                            <td>{{$question->set->name}}</td>
                             <td>{{$question->question}}</td>
                             <td>
                               @forelse($question->answers->where('is_correct',1) as $key=>$answer) 
-                                <span>#{{$answer->answer}}</span>
+                                <span class="text-success">#{{$answer->answer}}</span>
                               @empty 
 
                               @endforelse

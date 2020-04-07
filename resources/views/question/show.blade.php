@@ -11,10 +11,7 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                      <tr>
-                          <th>  SET  : </th>
-                          <td>{{$question->set->name}}</td>
-                      </tr>
+                      
                       <tr>
                           <th>  Subject : </th>
                           <td>{{$question->subject->name}}</td>

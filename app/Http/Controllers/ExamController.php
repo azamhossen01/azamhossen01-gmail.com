@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Set;
 use App\Exam;
+use App\Subject;
 use App\ExamDetail;
 use Illuminate\Http\Request;
 
@@ -11,23 +12,34 @@ class ExamController extends Controller
 {
     public function index(){
         $exams = Exam::all();
+        // return $exams;
         return view('exam.index',compact('exams'));
     }
 
     public function create(){
         $sets = Set::all();
-        return view('exam.create',compact('sets'));
+        $subjects = Subject::all();
+        // return $subjects[0]->questions->where('type',0);
+        return view('exam.create',compact('sets','subjects'));
     }
 
     public function store(Request $request){
-        $validateData = $request->validate([
-            'set_id' => 'required',
-            'student_name' => 'required',
-            'student_phone' => 'required|unique:exams',
-            'total' => 'required'
-        ]);
+        // return $request->question;
+        
 
-        Exam::create($validateData);
+        // Exam::create($validateData);
+        $exam = Exam::create([
+            'name' => $request->name
+        ]);
+        if($exam){
+            foreach($request->question as $key=>$question){
+                ExamDetail::create([
+                    'exam_id' => $exam->id,
+                    'set_id' => $request->set_id,
+                    'question_id' => $question
+                ]);
+            }
+        }
         return redirect()->route('exams.index');
     }
 
@@ -48,6 +60,12 @@ class ExamController extends Controller
     }
 
     public function show(Exam $exam){
+        // $sets =  $exam->exam_details->groupBy('set_id');
+        // foreach($sets as $set){
+        //     foreach($set as $s){
+        //         return $s->question->question;
+        //     }
+        // }
         return view('exam.show',compact('exam'));
     }
 
@@ -150,5 +168,76 @@ class ExamController extends Controller
         // return 'success';
 
         return view('result_publish',compact('exam'));
+    }
+
+    public function create_exam_set(Exam $exam){
+        $exam_details = $exam->exam_details->groupBy('set_id');
+       
+        foreach($exam_details as $key=>$exam_detail){
+            // return $key;
+           $sets = Set::where(function($query)use($exam_detail,$key){
+                $query->where('id','!=',$key);
+           })->get();
+        }
+        $subjects = Subject::all();
+        return view('exam.create_exam_set',compact('exam','sets','subjects'));
+    }
+
+    public function add_exam_set(Request $request,$id){
+        foreach($request->question as $key=>$question){
+            ExamDetail::create([
+                'exam_id' => $id,
+                'set_id' => $request->set_id,
+                'question_id' => $question
+            ]);
+        }
+        return redirect()->route('exams.show',$id);
+    }
+
+    public function edit_exam_set($set_id,$exam_id){
+        $mcq = ExamDetail::whereHas('question',function($query){
+            $query->where('type',0);
+        })->where([['exam_id',$exam_id],['set_id',$set_id]])->pluck('question_id')->toArray();
+        
+        $descriptive = ExamDetail::whereHas('question',function($query){
+            $query->where('type',1);
+        })->where([['exam_id',$exam_id],['set_id',$set_id]])->pluck('question_id')->toArray();
+        // return $questions;
+         $set = Set::findOrFail($set_id);
+        $exam = Exam::findOrFail($exam_id);
+        $subjects = Subject::all();
+        
+        $sets = Set::all();
+        return view('exam.edit_exam_set',compact('set','exam','mcq','descriptive','subjects','sets'));
+    }
+
+    public function update_exam_set(Request $request){
+        $new_questions = $request->question;
+        $old_questions = ExamDetail::where([['exam_id',$request->exam_id],['set_id',$request->set_id]])->get();
+        foreach($old_questions as $oq){
+            $oq->delete();
+        }
+        foreach($new_questions as $nq){
+            ExamDetail::create([
+                'exam_id' => $request->exam_id,
+                'set_id' => $request->set_id,
+                'question_id' => $nq
+            ]);
+        }
+        return redirect()->back();
+        // if(count($new_questions) > count($old_questions)){
+        //     $count1 = 0;
+        //     while(count($new_questions) > $count1){
+        //         ExamDetail::update([
+        //             'exam_id' => $request->exam_id,
+        //             'set_id' => $request->set_id,
+        //             'question_id' => $question->id
+        //         ]);
+        //     }
+        // }elseif(count($new_questions) == count($old_questions)){
+        //     return 'soman';
+        // }else{
+        //     return 'old beshi';
+        // }
     }
 }

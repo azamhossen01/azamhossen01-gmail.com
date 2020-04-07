@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    protected $fillable = ['subject_id','set_id','question','type','marks'];
+    // protected $fillable = ['subject_id','set_id','question','type','marks'];
+    protected $guarded = [];
 
-    public function set(){
-        return $this->belongsTo(Set::class);
-    }
+    
     public function subject(){
         return $this->belongsTo(Subject::class);
     }

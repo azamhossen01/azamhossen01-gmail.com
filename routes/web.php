@@ -1,5 +1,7 @@
 <?php
 
+use App\Exam;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,14 +14,15 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    $exams = Exam::all();
+    return view('welcome',compact('exams'));
+})->name('/');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['middleware'=>'auth'],function(){
+Route::group(['middleware'=>['auth']],function(){
     //route for subjects
     Route::get('subjects','SubjectController@index')->name('subjects.index');
     Route::get('subjects/create','SubjectController@create')->name('subjects.create');
@@ -48,18 +51,34 @@ Route::group(['middleware'=>'auth'],function(){
     //route for questions 
     Route::get('exams','ExamController@index')->name('exams.index');
     Route::get('exams/create','ExamController@create')->name('exams.create');
+    Route::get('exams/create/set/{exam}','ExamController@create_exam_set')->name('exams.create.set');
     Route::get('exams/edit/{exam}','ExamController@edit')->name('exams.edit');
+    Route::get('exams/edit_exam_set/{id}/{exam_id}','ExamController@edit_exam_set')->name('exams.edit_exam_set');
     Route::get('exams/show/{exam}','ExamController@show')->name('exams.show');
     Route::put('exams/update/{exam}','ExamController@update')->name('exams.update');
+    Route::put('exams/update_exam_set','ExamController@update_exam_set')->name('exams.update_exam_set');
     Route::post('exams','ExamController@store')->name('exams.store');
+    Route::post('exams/add_exam_set/{id}','ExamController@add_exam_set')->name('add_exam_set.store');
     Route::get('exams/delete/{exam}','ExamController@delete')->name('exams.delete');
 
 
     // route for exam start
     
 });
+// Route::group(['middleware'=>['student']],function(){
+Route::post('student_register','StudentController@student_register')->name('student_register');
+Route::get('student_logout','StudentController@student_logout')->name('student_logout');
 
-Route::post('start_exam','ExamController@start_exam')->name('start_exam');
-Route::post('submit_exam/{exam}','ExamController@submit_exam')->name('submit_exam');
-Route::get('result_publish/{exam}','ExamController@result_publish')->name('result_publish');
+Route::get('check_user_session','StudentController@check_user_session')->name('check_user_session');
 
+Route::get('get_all_exams','StudentController@get_all_exams')->name('get_all_exams');
+Route::get('exam_details/{exam_id}','StudentController@exam_details')->name('exam_details');
+// });
+// Route::post('start_exam','ExamController@start_exam')->name('start_exam');
+// Route::post('submit_exam/{exam}','ExamController@submit_exam')->name('submit_exam');
+// Route::get('result_publish/{exam}','ExamController@result_publish')->name('result_publish');
+
+
+// Route::get('/{path}',function(){
+//     return redirect()->route('/');
+// })->where('path','.*');

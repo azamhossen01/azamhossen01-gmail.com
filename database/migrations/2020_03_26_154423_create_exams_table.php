@@ -15,13 +15,8 @@ class CreateExamsTable extends Migration
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('set_id');
-            $table->string('student_name');
-            $table->string('student_phone');
-            $table->integer('total')->nullable();
-            $table->integer('mark_obtain_in_mcq')->nullable();
+            $table->string('name');
             $table->timestamps();
-            $table->foreign('set_id')->references('id')->on('sets')->onDelete('cascade');
         });
     }
 

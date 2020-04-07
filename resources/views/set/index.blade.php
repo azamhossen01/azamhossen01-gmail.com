@@ -35,7 +35,7 @@
                             <td>{{$key+1}}</td>
                             <td>{{$set->name}}</td>
                             <td>{{$set->description}}</td>
-                            <td>{{$set->created_at->format('F d Y')}}</td>
+                            <td>{{$set->created_at?$set->created_at->format('F d Y'):''}}</td>
                             <td>
                             <a href="{{route('sets.edit',$set->id)}}" class="btn btn-warning btn-sm">Edit</a>
                             </td>

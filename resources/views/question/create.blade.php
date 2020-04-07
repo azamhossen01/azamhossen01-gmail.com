@@ -21,7 +21,7 @@
                     @endforelse
                   </select>
                 </div>
-                <div class="form-group">
+                {{-- <div class="form-group">
                   <label for="set_id">Set</label>
                   <select name="set_id" class="form-control" id="set_id">
                     <option value="">Select Set</option>
@@ -30,7 +30,7 @@
                     @empty 
                     @endforelse
                   </select>
-                </div>
+                </div> --}}
                 
                 <div class="form-group">
                   <label for="question">Question</label>

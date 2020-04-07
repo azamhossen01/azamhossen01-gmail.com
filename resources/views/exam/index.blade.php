@@ -15,8 +15,7 @@
                         <tr>
                           <th>SL</th>
                           <th>Name</th>
-                          <th>Phone</th>
-                          <th>Set</th>
+                          
                           <th>Created At</th>
                           <th>Action</th>
                         </tr>
@@ -25,8 +24,6 @@
                       <tr>
                           <th>SL</th>
                           <th>Name</th>
-                          <th>Phone</th>
-                          <th>Set</th>
                           <th>Created At</th>
                           <th>Action</th>
                         </tr>
@@ -35,9 +32,7 @@
                         @forelse($exams as $key=>$exam)
                             <tr>
                             <td>{{$key+1}}</td>
-                            <td>{{$exam->student_name}}</td>
-                            <td>{{$exam->student_phone}}</td>
-                            <td>{{$exam->set->name}}</td>
+                            <td>{{$exam->name}}</td>
                             <td>{{$exam->created_at->format('F d Y')}}</td>
                             <td>
                             <a href="{{route('exams.edit',$exam->id)}}" class="btn btn-warning btn-sm">Edit</a>
