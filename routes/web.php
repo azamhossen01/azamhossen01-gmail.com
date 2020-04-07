@@ -13,10 +13,7 @@ use App\Exam;
 |
 */
 
-Route::get('/', function () {
-    $exams = Exam::all();
-    return view('welcome',compact('exams'));
-})->name('/');
+Route::get('/','StudentController@student_home')->name('/');
 
 Auth::routes();
 
@@ -62,6 +59,10 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('exams/delete/{exam}','ExamController@delete')->name('exams.delete');
 
 
+    // route for students in backend
+    Route::get('students','StudentController@index')->name('students.index');
+    Route::get('students/{student}','StudentController@show')->name('students.show');
+
     // route for exam start
     
 });
@@ -73,6 +74,9 @@ Route::get('check_user_session','StudentController@check_user_session')->name('c
 
 Route::get('get_all_exams','StudentController@get_all_exams')->name('get_all_exams');
 Route::get('exam_details/{exam_id}','StudentController@exam_details')->name('exam_details');
+
+Route::get('start_exam/{exam_id}/{set_id}','StudentController@start_exam')->name('start_exam');
+Route::post('result','StudentController@result')->name('result');
 // });
 // Route::post('start_exam','ExamController@start_exam')->name('start_exam');
 // Route::post('submit_exam/{exam}','ExamController@submit_exam')->name('submit_exam');
