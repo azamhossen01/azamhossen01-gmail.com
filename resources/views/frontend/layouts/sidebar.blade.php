@@ -1,19 +1,19 @@
 <div class="bg-light border-right" id="sidebar-wrapper">
 <div class="sidebar-heading"><a href="{{route('/')}}">Online Exam</a> </div>
-
+    <hr>
     <div class="list-group list-group-flush">
       @if(session('phone'))
       
      
 
 
-      @forelse(\App\Result::where('student_id',session('student_id'))->get() as $result)
+      {{-- @forelse(\App\Result::where('student_id',session('student_id'))->get() as $result)
     <a href="{{route('after_exam',$result->id)}}" class="list-group-item list-group-item-action bg-light">{{$result->exam->name}}</a>
       @empty 
         <h5>No Result History Available For You</h5>
         
-      @endforelse
-      <hr>
+      @endforelse --}}
+     
 
 
       @forelse(\App\Exam::where('level_id',session('level_id'))->get() as $exam)
