@@ -18,4 +18,8 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
+    public function level(){
+        return $this->belongsTo(Level::class);
+    }
+
 }

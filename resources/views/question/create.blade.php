@@ -11,9 +11,21 @@
             <div class="card-body">
             <form action="{{route('questions.store')}}" method="post" enctype="multipart/form-data">
               @csrf
+
+              <div class="form-group">
+                  <label for="level_id">Class</label>
+                  <select name="level_id" class="form-control" id="level_id">
+                    <option value="">Select Class</option>
+                    @forelse($levels as $key=>$level)
+                  <option value="{{$level->id}}">{{$level->name}}</option> 
+                    @empty 
+                    @endforelse
+                  </select>
+                </div>
+
                 <div class="form-group">
                   <label for="subject_id">Subject</label>
-                  <select name="subject_id" class="form-control" id="subject_id">
+                  <select name="subject_id" class="form-control" id="subject_id" required>
                     <option value="">Select Subject</option>
                     @forelse($subjects as $key=>$subject)
                   <option value="{{$subject->id}}">{{$subject->name}}</option> 
@@ -21,16 +33,7 @@
                     @endforelse
                   </select>
                 </div>
-                {{-- <div class="form-group">
-                  <label for="set_id">Set</label>
-                  <select name="set_id" class="form-control" id="set_id">
-                    <option value="">Select Set</option>
-                    @forelse($sets as $key=>$set)
-                  <option value="{{$set->id}}">{{$set->name}}</option> 
-                    @empty 
-                    @endforelse
-                  </select>
-                </div> --}}
+                
                 
                 <div class="form-group">
                   <label for="question">Question</label>
@@ -39,7 +42,7 @@
 
                 <div class="form-group">
                   <label for="type">Type</label>
-                  <select name="type" class="form-control" id="type" onchange="get_answer_type(this.value)">
+                  <select name="type" class="form-control" id="type" onchange="get_answer_type(this.value)" required>
                     <option value="">Select Question Type</option>
                   <option value="0">MCQ</option> 
                   <option value="1">Descrptive</option> 

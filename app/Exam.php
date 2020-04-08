@@ -17,6 +17,10 @@ class Exam extends Model
         return $this->hasMany(ExamDetail::class);
     }
 
+    public function level(){
+        return $this->belongsTo(Level::class);
+    }
+
     // public function sets(){
     //     return $this->hasMany(ExamDetail::class,'set_id','exam_id');
     // }

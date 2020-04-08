@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Set;
 use App\Exam;
+use App\Level;
 use App\Subject;
 use App\ExamDetail;
 use Illuminate\Http\Request;
@@ -17,25 +18,42 @@ class ExamController extends Controller
     }
 
     public function create(){
-        $sets = Set::all();
-        $subjects = Subject::all();
+        // return request();
+
+        if(request('level_id') && request('subject_id')){
+           $level = Level::where('id',request('level_id'))->first();
+           $subjects = [];
+           foreach(request('subject_id') as $subject_id){
+            array_push($subjects,Subject::where('id',$subject_id)->first());
+           }
+           return view('exam.create',compact('subjects','level'));
+        }else{
+            $levels = Level::all();
+            $subjects = Subject::all();
+            return view('exam.create',compact('subjects','levels'));
+        }
         // return $subjects[0]->questions->where('type',0);
-        return view('exam.create',compact('sets','subjects'));
+        
     }
 
     public function store(Request $request){
         // return $request->question;
+        // return $request;
         
 
         // Exam::create($validateData);
         $exam = Exam::create([
-            'name' => $request->name
+            'name' => $request->name,
+            'level_id' => $request->level_id
         ]);
-        if($exam){
+        $set = Set::create([
+            'name' => $request->set_name
+        ]);
+        if($exam && $set){
             foreach($request->question as $key=>$question){
                 ExamDetail::create([
                     'exam_id' => $exam->id,
-                    'set_id' => $request->set_id,
+                    'set_id' => $set->id,
                     'question_id' => $question
                 ]);
             }
@@ -60,6 +78,11 @@ class ExamController extends Controller
     }
 
     public function show(Exam $exam){
+
+        $sets = $exam->exam_details->groupBy('set_id');
+        // foreach($sets as $key=>$set){
+        //     return $sets[2][0]->set->name;
+        // }
         // $sets =  $exam->exam_details->groupBy('set_id');
         // foreach($sets as $set){
         //     foreach($set as $s){
@@ -171,23 +194,27 @@ class ExamController extends Controller
     }
 
     public function create_exam_set(Exam $exam){
-        $exam_details = $exam->exam_details->groupBy('set_id');
-       
-        foreach($exam_details as $key=>$exam_detail){
-            // return $key;
-           $sets = Set::where(function($query)use($exam_detail,$key){
-                $query->where('id','!=',$key);
-           })->get();
+        if(request('subject_id')){
+            $subjects = [];
+            foreach(request('subject_id') as $subject_id){
+                array_push($subjects,Subject::where('id',$subject_id)->first());
+               }
+        }else{
+            $subjects = Subject::all();
         }
         $subjects = Subject::all();
-        return view('exam.create_exam_set',compact('exam','sets','subjects'));
+        return view('exam.create_exam_set',compact('exam','subjects'));
     }
 
     public function add_exam_set(Request $request,$id){
+        // return $request;
+        $set = Set::create([
+            'name' => $request->set_name
+        ]);
         foreach($request->question as $key=>$question){
             ExamDetail::create([
                 'exam_id' => $id,
-                'set_id' => $request->set_id,
+                'set_id' => $set->id,
                 'question_id' => $question
             ]);
         }

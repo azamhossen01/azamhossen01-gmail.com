@@ -14,8 +14,8 @@
               @endphp
               @forelse($sets as $key=>$set)
               <div class="jumbotron">
-              <h1 class="display-4">SET : {{$set[$key]->set->name}}</h1>
-                <p class="lead">{{$set[$key]->set->description}}</p>
+              <h1 class="display-4">SET : {{$sets[$key][0]->set->name}}</h1>
+                <p class="lead">{{$sets[$key][0]->set->description}}</p>
                 <hr class="my-4">
                 <div class="row">
                   <div class="col-lg-6">
@@ -45,7 +45,7 @@
                 </div>
                 
                 <p class="lead">
-                <a class="btn btn-warning btn-lg" href="{{route('exams.edit_exam_set',['set_id'=>$set[$key]->set->id,'exam_id'=>$exam->id])}}" role="button">Edit</a>
+                {{-- <a class="btn btn-warning btn-lg" disabled href="{{route('exams.edit_exam_set',['set_id'=>$sets[$key][0]->set->id,'exam_id'=>$exam->id])}}" role="button" >Edit</a> --}}
                 </p>
               </div>
 

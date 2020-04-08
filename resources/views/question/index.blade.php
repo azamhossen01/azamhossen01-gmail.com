@@ -14,6 +14,8 @@
                       <thead>
                         <tr>
                           <th>SL</th>
+                          <th>Class</th>
+                          <th>Subject</th>
                           <th>Question</th>
                           <th>Answer</th>
                           <th>Marks</th>
@@ -22,17 +24,21 @@
                       </thead>
                       <tfoot>
                         <tr>
-                            <th>SL</th>
-                            <th>Question</th>
-                            <th>Answer</th>
-                            <th>Marks</th>
-                            <th>Action</th>
+                          <th>SL</th>
+                          <th>Class</th>
+                          <th>Subject</th>
+                          <th>Question</th>
+                          <th>Answer</th>
+                          <th>Marks</th>
+                          <th>Action</th>
                           </tr>
                       </tfoot>
                       <tbody>
                         @forelse($questions as $key=>$question)
                             <tr>
                             <td>{{$key+1}}</td>
+                            <td>{{$question->level->name}}</td>
+                            <td>{{$question->subject->name}}</td>
                             <td>{{$question->question}}</td>
                             <td>
                               @forelse($question->answers->where('is_correct',1) as $key=>$answer) 

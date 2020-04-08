@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Set;
+use App\Level;
 use App\Answer;
 use App\Subject;
 use App\Question;
@@ -17,21 +18,26 @@ class QuestionController extends Controller
 
     public function create(){
         $subjects = Subject::all();
+        $levels = Level::all();
         // $sets = Set::all();
-        return view('question.create',compact('subjects'));
+        return view('question.create',compact('subjects','levels'));
     }
 
     public function store(Request $request){
+        // return $request;
         // return $col1 = $request;
         // $correct_answers = $request->is_correct;
         // return count($correct_answers);
+        
         $this->validate($request,[
+            'level_id' => 'required',
             'subject_id' => 'required',
             'question' => 'required',
             'type' => 'required',
             'marks' => 'required'
         ]);
         $question = Question::create([
+            'level_id' => $request->level_id,
             'subject_id' => $request->subject_id,
             'question' => $request->question,
             'type' => $request->type,
@@ -45,7 +51,7 @@ class QuestionController extends Controller
             $save_answer->question_id = $question->id;
             if($request->attachment){
                 $image_name = time().'.'.$request->attachment->getClientOriginalExtension();
-                $request->attachment->move(public_path('backend/images'),$image_name);
+                $request->attachment->move(public_path('backend/images/questions'),$image_name);
                 $save_answer->attachment = $image_name;
             }
            

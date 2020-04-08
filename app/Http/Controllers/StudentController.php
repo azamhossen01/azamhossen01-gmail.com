@@ -12,6 +12,7 @@ use App\ResultDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Session\Session;
+use App\Level;
 
 class StudentController extends Controller
 {
@@ -19,9 +20,12 @@ class StudentController extends Controller
     public function student_home(){
         if(session('phone')){
             return redirect()->back();
+        }else{
+            $levels = Level::all();
+            return view('frontend.student_register',compact('levels'));
         }
-        $exams = Exam::all();
-        return view('frontend/welcome',compact('exams'));
+        // $exams = Exam::all();
+        // return view('frontend/welcome',compact('exams'));
     }
 
     public function student_register(Request $request){
@@ -39,9 +43,10 @@ class StudentController extends Controller
         //     $email = implode('',$explode_name).rand(1,100).'@gmail.com';
         // }
         
-        $student = Student::where('phone',$request->phone)->first();
+        $student = Student::where([['level_id',$request->level_id],['phone',$request->phone]])->first();
         if(!$student){
             $student = Student::create([
+                'level_id' => $request->level_id,
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone
@@ -49,9 +54,10 @@ class StudentController extends Controller
         }
         // return $student;
         if($student){
-            session(['phone' => $student->phone]);
+            session(['student_id'=>$student->id,'phone' => $student->phone,'level_id'=>$student->level_id]);
             // $this->start_exam($request->exam_id,$request->set_id);
-            return redirect('start_exam/'.$request->exam_id.'/'.$request->set_id);
+            // return redirect('start_exam/'.$request->exam_id.'/'.$request->set_id);
+            return view('frontend.welcome');
         }
         
     //    $exams = Exam::all();
@@ -109,11 +115,14 @@ class StudentController extends Controller
     }
 
     public function result(Request $request){
-        $student = Student::where('phone',session('phone'))->first();
+        $student = Student::where([['phone',session('phone')],['level_id',session('level_id')]])->first();
         // return $request;
+        
+        $exam_id = $request->exam_id;
+        $set_id = $request->set_id;
         $result = Result::create([
-            'exam_id' => $request->exam_id,
-            'set_id' => $request->set_id,
+            'exam_id' => $exam_id,
+            'set_id' => $set_id,
             'student_id' => $student->id,
         ]);
 
@@ -142,8 +151,32 @@ class StudentController extends Controller
             $result_detail->answer_id = $answer_id[$key];
             $result_detail->save();
         }
-        return redirect()->route('student_logout');
+
+        
+        
+        
+        return redirect('after_exam/'.$result->id);
+        // return view('frontend.after_exam',compact('session_data','mcq','descriptive','exam_id','set_id'));
+        // return redirect()->route('student_logout');
     }
+
+    public function after_exam($result_id){
+        $result = Result::findOrFail($result_id);
+        $student = Student::find($result->student_id);
+        
+        $exam_id = $result->exam_id;
+        $set_id = $result->set_id;
+        $mcq = ExamDetail::whereHas('question',function($query){
+            $query->where('type',0);
+        })->where('exam_id',$exam_id)->where('set_id',$set_id)->get();
+        $descriptive = ExamDetail::whereHas('question',function($query){
+            $query->where('type',1);
+        })->where('exam_id',$exam_id)->where('set_id',$set_id)->get();
+
+        return view('frontend.after_exam',compact('mcq','descriptive','exam_id','set_id','result'));
+    }
+
+
 
     public function index(){
         $students = Student::all();
@@ -154,6 +187,21 @@ class StudentController extends Controller
         //  $student;
         $results = $student->results;
         return view('student.show',compact('results','student'));
+    }
+
+    public function student_exam_details(Result $result){
+            
+          $mcq = ResultDetail::where([['result_id',$result->id],['attachment',null]])->get()->groupBy('question_id');
+        $descriptive = ResultDetail::where([['result_id',$result->id],['attachment','!=',null]])->get();
+        // return $mcq;
+        // foreach($mcq as $key=>$mc){
+        //     return $mcq[$key];
+        // }
+        // return $mcq;
+        // return $mcq;
+
+        
+        return view('student.student_exam_details',compact('mcq','descriptive','result'));
     }
 
 

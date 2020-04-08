@@ -20,6 +20,14 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware'=>['auth']],function(){
+    
+    // routes for levels
+    Route::get('levels','LevelController@index')->name('levels.index');
+    Route::get('levels/create','LevelController@create')->name('levels.create');
+    Route::get('levels/edit/{level}','LevelController@edit')->name('levels.edit');
+    Route::put('levels/update/{level}','LevelController@update')->name('levels.update');
+    Route::post('levels','LevelController@store')->name('levels.store');
+
     //route for subjects
     Route::get('subjects','SubjectController@index')->name('subjects.index');
     Route::get('subjects/create','SubjectController@create')->name('subjects.create');
@@ -62,6 +70,7 @@ Route::group(['middleware'=>['auth']],function(){
     // route for students in backend
     Route::get('students','StudentController@index')->name('students.index');
     Route::get('students/{student}','StudentController@show')->name('students.show');
+    Route::get('student_exam_details/{result}','StudentController@student_exam_details')->name('students.student_exam_details');
 
     // route for exam start
     
@@ -77,6 +86,7 @@ Route::get('exam_details/{exam_id}','StudentController@exam_details')->name('exa
 
 Route::get('start_exam/{exam_id}/{set_id}','StudentController@start_exam')->name('start_exam');
 Route::post('result','StudentController@result')->name('result');
+Route::get('after_exam/{result_id}','StudentController@after_exam')->name('after_exam');
 // });
 // Route::post('start_exam','ExamController@start_exam')->name('start_exam');
 // Route::post('submit_exam/{exam}','ExamController@submit_exam')->name('submit_exam');

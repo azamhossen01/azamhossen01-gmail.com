@@ -13,6 +13,10 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                       
                       <tr>
+                          <th>  Class : </th>
+                          <td>{{$question->level->name}}</td>
+                      </tr>
+                      <tr>
                           <th>  Subject : </th>
                           <td>{{$question->subject->name}}</td>
                       </tr>
@@ -53,7 +57,7 @@
                           </table>
                           @else 
                           <tr>  
-                            <td><img src="{{asset('backend/images/'.$question->answers->first()->attachment)}}" alt="">
+                            <td><img src="{{asset('backend/images/questions/'.$question->answers->first()->attachment)}}" alt="">
                             
                             </td>
                           </tr>

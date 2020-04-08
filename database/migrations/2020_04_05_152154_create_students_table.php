@@ -15,10 +15,12 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('level_id');
             $table->string('name');
             $table->string('email')->nullable();
             $table->integer('phone');
             $table->timestamps();
+            $table->foreign('level_id')->references('id')->on('levels')->onDelete('cascade');
         });
     }
 
